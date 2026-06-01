@@ -1,26 +1,483 @@
 @import "tailwindcss";
 
+/* ============================================================
+   RESIDENT ROBOTICS — Design System
+   Theme: Dark lab / tech.  Motion: maximal cinematic.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand palette (user-supplied) */
+  --brand-blue: #2f6bff;
+  --blue-deep: #081b45;
+  --yellow: #facc15;
+  --orange: #ff5100;
+  --ink: #0c0c0c;
+
+  /* Derived surfaces for the dark lab look */
+  --bg: #05060c;            /* near-black, faint blue cast */
+  --bg-2: #080b18;          /* raised panel */
+  --bg-3: #0c1226;          /* card */
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+
+  /* Text */
+  --fg: #f4f6ff;
+  --fg-dim: #aab3d0;
+  --fg-faint: #6b7493;
+
+  /* Accent glows */
+  --glow-blue: rgba(47, 107, 255, 0.55);
+  --glow-orange: rgba(255, 81, 0, 0.5);
+
+  --radius: 8px;            /* brand button radius */
+  --radius-lg: 18px;
+  --maxw: 1280px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-bg-3: var(--bg-3);
+  --color-fg: var(--fg);
+  --color-fg-dim: var(--fg-dim);
+  --color-fg-faint: var(--fg-faint);
+  --color-brand-blue: var(--brand-blue);
+  --color-blue-deep: var(--blue-deep);
+  --color-yellow: var(--yellow);
+  --color-orange: var(--orange);
+  --color-ink: var(--ink);
+  --color-line: var(--line);
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: auto; /* Lenis handles smoothing */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Headings use Clash Display for a premium, distinctive voice. */
+.h-display,
+.h2,
+.h3 {
+  font-family: var(--font-display), var(--font-body), sans-serif;
+}
+
+/* Atmospheric base: subtle radial light. Gives the lab depth. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 50% -10%, rgba(47, 107, 255, 0.16), transparent 70%),
+    radial-gradient(40% 40% at 100% 0%, rgba(255, 81, 0, 0.08), transparent 70%);
+}
+
+/* Film grain overlay for texture */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+main,
+footer {
+  position: relative;
+  z-index: 2;
+}
+/* header is position:fixed via its own class — do NOT force position here,
+   or the unlayered rule overrides Tailwind's .fixed and it stops sticking. */
+header {
+  z-index: 50;
+}
+
+/* ---------- Typography scale (Poppins weight hierarchy) ---------- */
+.h-display {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 0.96;
+  font-size: clamp(2.6rem, 7vw, 6.2rem);
+}
+.h2 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+}
+.h3 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+}
+.lead {
+  font-weight: 400;
+  font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+  line-height: 1.5;
+  color: var(--fg-dim);
+}
+.body-text {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--fg-dim);
+}
+.eyebrow {
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+
+/* ---------- Layout helpers ---------- */
+.container-rr {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+}
+.section {
+  padding-block: clamp(5rem, 12vh, 9rem);
+}
+
+/* ---------- Buttons — engineered + arrow sweep ----------
+   Resting = solid brand color. Hover = a lighter shade sweeps across
+   on a skew, the label/arrow ride above, the arrow nudges forward. */
+.btn {
+  --btn-bg: var(--orange);
+  --btn-fg: #fff;
+  --btn-sweep: #ff7236;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.97rem;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: 1px solid transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.4s, border-color 0.4s;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -1px -2px;
+  z-index: -1;
+  background: var(--btn-sweep);
+  transform: translateX(-103%) skewX(-14deg);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn:hover::before {
+  transform: translateX(0) skewX(-14deg);
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 44px -18px var(--btn-bg);
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn-arrow {
+  display: inline-flex;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+.btn-lg {
+  padding: 1.1rem 1.9rem;
+  font-size: 1.05rem;
+}
+.btn-sm {
+  padding: 0.65rem 1.05rem;
+  font-size: 0.85rem;
+}
+
+/* Variants — each just swaps the three color tokens */
+.btn-orange {
+  --btn-bg: var(--orange);
+  --btn-fg: #fff;
+  --btn-sweep: #ff7236;
+}
+.btn-blue {
+  --btn-bg: var(--brand-blue);
+  --btn-fg: #fff;
+  --btn-sweep: #5b8cff;
+}
+.btn-yellow {
+  --btn-bg: var(--yellow);
+  --btn-fg: var(--ink);
+  --btn-sweep: #ffe05c;
+}
+.btn-light {
+  --btn-bg: #f4f6ff;
+  --btn-fg: var(--ink);
+  --btn-sweep: #ffffff;
+}
+/* Ghost — hairline that fills with orange on hover, label flips to white */
+.btn-ghost {
+  --btn-bg: transparent;
+  --btn-fg: var(--fg);
+  --btn-sweep: var(--orange);
+  border-color: var(--line-strong);
+}
+.btn-ghost:hover {
+  color: #fff;
+  border-color: var(--orange);
+}
+/* Primary alias kept for any leftover usage */
+.btn-primary {
+  --btn-bg: var(--orange);
+  --btn-fg: #fff;
+  --btn-sweep: #ff7236;
+}
+
+/* ---------- Decorative ---------- */
+.text-grad-blue {
+  background: linear-gradient(120deg, #fff 0%, var(--brand-blue) 120%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hairline {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--fg-dim);
+  background: rgba(255, 255, 255, 0.02);
+}
+/* Distinctive card: layered gradient, inset top highlight, soft depth.
+   Use .card + decorate per-section for variety. */
+.card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0) 40%),
+    linear-gradient(180deg, var(--bg-3), var(--bg-2));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 30px 60px -40px rgba(0, 0, 0, 0.8);
+}
+
+/* Fades the rectangular edges of a white-bg product shot so it dissolves
+   into the dark scene — turns studio cut-outs into "lit" robots. */
+.robot-mask {
+  -webkit-mask-image: radial-gradient(75% 75% at 50% 48%, #000 60%, transparent 100%);
+  mask-image: radial-gradient(75% 75% at 50% 48%, #000 60%, transparent 100%);
+  mix-blend-mode: screen;
+}
+
+/* Spotlight disc behind a robot — lit pedestal feel. */
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(50% 45% at 50% 55%, var(--spot, rgba(47,107,255,0.28)), transparent 70%);
+  pointer-events: none;
+}
+
+/* Big ghost number that sits behind card content */
+.ghost-num {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* ============================================================
+   LIGHT THEME — opt-in per section.
+   Add class "light" to any <section>; descendants that use the
+   --fg/--bg/--line tokens flip automatically. White, minimal.
+   ============================================================ */
+.light {
+  --bg: #ffffff;
+  --bg-2: #f5f7fc;
+  --bg-3: #eef1f9;
+  --line: rgba(10, 18, 38, 0.09);
+  --line-strong: rgba(10, 18, 38, 0.16);
+  --fg: #0a1024;
+  --fg-dim: #515a72;
+  --fg-faint: #97a0b8;
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* Minimal constant animation for light sections: a faint drifting
+   grid + a slow breathing wash. Subtle, never distracting. */
+.light-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.light-bg::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background-image: linear-gradient(rgba(10, 18, 38, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 18, 38, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000, transparent 75%);
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000, transparent 75%);
+  animation: grid-drift 28s linear infinite;
+}
+.light-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 40% at 80% 20%, rgba(47, 107, 255, 0.07), transparent 70%),
+    radial-gradient(45% 45% at 15% 90%, rgba(255, 81, 0, 0.05), transparent 70%);
+  animation: wash-breathe 12s ease-in-out infinite alternate;
+}
+@keyframes grid-drift {
+  to { background-position: 64px 64px, 64px 64px; }
+}
+@keyframes wash-breathe {
+  from { opacity: 0.6; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.05); }
+}
+
+/* In-House R&D background — constant motion (drifting blueprint grid +
+   two slow roaming brand glows) so the section reads alive while the
+   robots reveal on scroll. Sits behind the white stages. */
+.rnd-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--bg);
+}
+.rnd-bg::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 58px 58px;
+  -webkit-mask-image: radial-gradient(125% 90% at 50% 35%, #000, transparent 82%);
+  mask-image: radial-gradient(125% 90% at 50% 35%, #000, transparent 82%);
+  animation: rnd-grid 26s linear infinite;
+}
+.rnd-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(40px);
+  will-change: transform;
+}
+.rnd-glow-1 {
+  width: 38vw;
+  height: 38vw;
+  left: 4%;
+  top: 8%;
+  background: radial-gradient(circle, rgba(47, 107, 255, 0.18), transparent 65%);
+  animation: rnd-roam-1 24s ease-in-out infinite;
+}
+.rnd-glow-2 {
+  width: 30vw;
+  height: 30vw;
+  right: 2%;
+  bottom: 6%;
+  background: radial-gradient(circle, rgba(255, 81, 0, 0.13), transparent 65%);
+  animation: rnd-roam-2 30s ease-in-out infinite;
+}
+@keyframes rnd-grid {
+  to { background-position: 58px 0, 0 58px; }
+}
+@keyframes rnd-roam-1 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(22%, 16%); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes rnd-roam-2 {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-20%, -14%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Tool logo — monochrome on the section bg (no chip), colorizes on hover. */
+.tool-logo {
+  filter: grayscale(1) brightness(0) invert(0.35);
+  opacity: 0.65;
+  transition: filter 0.4s ease, opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.tool-logo:hover {
+  filter: none;
+  opacity: 1;
+  transform: translateY(-3px);
+}
+.light .tool-logo {
+  filter: grayscale(1) brightness(0) invert(0.15);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }
