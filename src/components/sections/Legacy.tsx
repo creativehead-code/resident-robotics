@@ -77,15 +77,6 @@ export default function Legacy() {
             </div>
           </div>
         </Reveal>
-
-        <Reveal delay={0.2}>
-          <p className="body-text mx-auto mt-10 max-w-2xl text-center text-sm">
-            Only <strong className="text-[var(--fg)]">70%</strong> and{" "}
-            <strong className="text-[var(--fg)]">49+</strong> are locked from the
-            brochure. The rest await real figures — honest numbers close more
-            sign-ups than any headline.
-          </p>
-        </Reveal>
       </div>
     </section>
   );

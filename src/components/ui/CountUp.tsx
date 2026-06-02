@@ -30,5 +30,5 @@ export default function CountUp({
     return () => cancelAnimationFrame(raf);
   }, [inView, value, duration]);
 
-  return <span ref={ref}>{display}</span>;
+  return <span ref={ref}>{display.toLocaleString("en-IN")}</span>;
 }

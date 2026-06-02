@@ -154,12 +154,12 @@ export const experience = {
 export const legacy = {
   heading: "The Numbers Behind the Name",
   stats: [
-    { value: "70", suffix: "%", label: "of our team are engineers", locked: true },
-    { value: "49", suffix: "+", label: "companies actively hiring from us", locked: true },
-    { value: null, suffix: "", label: "students trained", locked: false },
-    { value: null, suffix: "", label: "cohorts graduated", locked: false },
-    { value: null, suffix: "%", label: "internship conversion rate", locked: false },
-    { value: null, suffix: "+", label: "robots built in-house", locked: false },
+    { value: "48", suffix: "k+", label: "Mentees Enrolled", locked: true },
+    { value: "1900", suffix: "+", label: "Colleges Reached · Pan India", locked: true },
+    { value: "40", suffix: "+", label: "Industrial Trainings", locked: true },
+    { value: "100", suffix: "+", label: "Internship Companies", locked: true },
+    { value: "70", suffix: "%", label: "of our Team are Engineers", locked: true },
+    { value: "49", suffix: "+", label: "Robotics Hiring Partners", locked: true },
   ],
 };
 
