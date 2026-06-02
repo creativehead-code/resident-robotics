@@ -31,12 +31,16 @@ export async function appendToSheet(
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
-    // Apps Script responds with a redirect to googleusercontent — fetch follows it.
-    redirect: "follow",
+    // Apps Script returns a 302 → script.googleusercontent.com on SUCCESS
+    // (doPost has already run + appended the row before redirecting). The
+    // redirect target isn't reliably readable server-to-server, so we treat
+    // the 302 itself as success and do NOT follow it.
+    redirect: "manual",
   });
 
-  if (!res.ok) {
-    throw new Error(`Sheet webhook failed: ${res.status} ${res.statusText}`);
+  // 2xx or any 3xx redirect = doPost executed successfully.
+  if (res.status >= 200 && res.status < 400) {
+    return { ok: true, stored: true };
   }
-  return { ok: true, stored: true };
+  throw new Error(`Sheet webhook failed: ${res.status} ${res.statusText}`);
 }
