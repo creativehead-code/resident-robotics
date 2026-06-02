@@ -1,12 +1,44 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { submitApplication, submitInquiry } from "@/app/actions";
 import { initialFormState, type FormState } from "@/lib/formState";
 import Reveal, { RevealWords } from "@/components/ui/Reveal";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/** First-touch lead attribution: prefer UTM tags (your ad links), else the
+ *  referring site, else "direct". Captured once and kept for the session. */
+function getAttribution(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    const saved = sessionStorage.getItem("rr_source");
+    if (saved) return saved;
+  } catch {}
+
+  const p = new URLSearchParams(window.location.search);
+  const utm = [p.get("utm_source"), p.get("utm_medium"), p.get("utm_campaign")]
+    .filter(Boolean)
+    .join(" / ");
+
+  let source = utm;
+  if (!source) {
+    const ref = document.referrer;
+    if (ref) {
+      try {
+        const host = new URL(ref).hostname.replace(/^www\./, "");
+        if (host && host !== window.location.hostname) source = host;
+      } catch {}
+    }
+  }
+  source = source || "direct";
+
+  try {
+    sessionStorage.setItem("rr_source", source);
+  } catch {}
+  return source;
+}
 
 const inputBase =
   "w-full rounded-lg border bg-[var(--bg-2)] px-4 py-3 text-[var(--fg)] outline-none transition-colors placeholder:text-[var(--fg-faint)] focus:border-[var(--brand-blue)]";
@@ -125,6 +157,8 @@ const tabs = [
 
 export default function ApplySection() {
   const [tab, setTab] = useState<(typeof tabs)[number]["id"]>("apply");
+  const [source, setSource] = useState("");
+  useEffect(() => setSource(getAttribution()), []);
   const [appState, applyAction, applyPending] = useActionState(submitApplication, initialFormState);
   const [inqState, inquireAction, inqPending] = useActionState(submitInquiry, initialFormState);
 
@@ -182,6 +216,7 @@ export default function ApplySection() {
                   ) : (
                     <form action={applyAction} className="relative grid gap-4">
                       <Honeypot />
+                      <input type="hidden" name="source" value={source} readOnly />
                       <div className="grid gap-4 sm:grid-cols-2">
                         <Field label="Full name" name="fullName" required error={ae.fullName} autoComplete="name" />
                         <Field label="Email" name="email" type="email" required error={ae.email} autoComplete="email" />
