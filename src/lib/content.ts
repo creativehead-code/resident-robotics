@@ -172,7 +172,11 @@ export const footer = {
     { name: "Dhiral", phone: "87993 07628" },
   ],
   email: "partnerships@myequation.in",
-  socials: ["Instagram", "LinkedIn", "Facebook", "YouTube", "Twitter"],
+  socials: [
+    { label: "Instagram", href: "https://instagram.com/myequation.in" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/my-equation/" },
+    { label: "YouTube", href: "https://www.youtube.com/@MyEquation" },
+  ],
   tagline: "Ideation · Inspiration · Innovation",
   cta: { label: "Apply Now — Limited Seats", href: "#apply" },
 };

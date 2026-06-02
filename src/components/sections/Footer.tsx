@@ -45,10 +45,17 @@ export default function Footer() {
             >
               {footer.email}
             </a>
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-5 flex flex-wrap gap-2.5">
               {footer.socials.map((s) => (
-                <a key={s} href="#" className="chip hover:border-[var(--brand-blue)]">
-                  {s}
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="grid h-10 w-10 place-items-center rounded-full border border-[var(--line-strong)] text-[var(--fg-dim)] transition-colors hover:border-[var(--brand-blue)] hover:text-[var(--fg)]"
+                >
+                  <SocialIcon name={s.label} />
                 </a>
               ))}
             </div>
@@ -74,4 +81,31 @@ export default function Footer() {
       </div>
     </footer>
   );
+}
+
+function SocialIcon({ name }: { name: string }) {
+  if (name === "Instagram") {
+    return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+        <rect x="2" y="2" width="20" height="20" rx="5.5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none" />
+      </svg>
+    );
+  }
+  if (name === "LinkedIn") {
+    return (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+        <path d="M4.98 3.5a2.5 2.5 0 1 1-.02 5 2.5 2.5 0 0 1 .02-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21h-4z" />
+      </svg>
+    );
+  }
+  if (name === "YouTube") {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+        <path d="M23 12s0-3.4-.43-5.03a2.62 2.62 0 0 0-1.84-1.84C18.9 4.7 12 4.7 12 4.7s-6.9 0-8.73.43a2.62 2.62 0 0 0-1.84 1.84C1 8.6 1 12 1 12s0 3.4.43 5.03c.24.9.94 1.6 1.84 1.84C5.1 19.3 12 19.3 12 19.3s6.9 0 8.73-.43a2.62 2.62 0 0 0 1.84-1.84C23 15.4 23 12 23 12zM9.75 15.5v-7l6 3.5z" />
+      </svg>
+    );
+  }
+  return null;
 }
