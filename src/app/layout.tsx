@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 
@@ -42,11 +43,13 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
   return (
     <html lang="en" className={`${clash.variable} ${general.variable} ${inter.variable} h-full`}>
       <body className="min-h-full antialiased">
         <SmoothScroll>{children}</SmoothScroll>
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

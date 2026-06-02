@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { sendGAEvent } from "@next/third-parties/google";
 import { submitApplication, submitInquiry } from "@/app/actions";
 import { initialFormState, type FormState } from "@/lib/formState";
 import Reveal, { RevealWords } from "@/components/ui/Reveal";
@@ -18,7 +19,13 @@ function getAttribution(): string {
   } catch {}
 
   const p = new URLSearchParams(window.location.search);
-  const utm = [p.get("utm_source"), p.get("utm_medium"), p.get("utm_campaign")]
+  const utm = [
+    p.get("utm_source"),
+    p.get("utm_medium"),
+    p.get("utm_campaign"),
+    p.get("utm_content"),
+    p.get("utm_term"),
+  ]
     .filter(Boolean)
     .join(" / ");
 
@@ -161,6 +168,14 @@ export default function ApplySection() {
   useEffect(() => setSource(getAttribution()), []);
   const [appState, applyAction, applyPending] = useActionState(submitApplication, initialFormState);
   const [inqState, inquireAction, inqPending] = useActionState(submitInquiry, initialFormState);
+
+  // GA4 conversion events on successful submit.
+  useEffect(() => {
+    if (appState.ok) sendGAEvent("event", "generate_lead", { form_type: "application", source });
+  }, [appState.ok, source]);
+  useEffect(() => {
+    if (inqState.ok) sendGAEvent("event", "generate_lead", { form_type: "inquiry", source });
+  }, [inqState.ok, source]);
 
   const ae = appState.errors ?? {};
   const ie = inqState.errors ?? {};
