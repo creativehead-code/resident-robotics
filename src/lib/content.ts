@@ -60,10 +60,10 @@ export const robots = {
       description:
         "Every chassis, mount and shell is designed, 3D-printed and assembled on our own R&D floor — the whole journey, in-house.",
       specs: [
-        ["Payload", "15 kg"],
-        ["Runtime", "8 hrs"],
+        ["Payload", "4 kg"],
+        ["Runtime", "1–1.15 hrs"],
         ["Navigation", "LiDAR + SLAM"],
-        ["Top speed", "1.5 m/s"],
+        ["Top speed", "0.5 m/s"],
       ],
     },
     {
@@ -75,7 +75,7 @@ export const robots = {
         "Real-time mapping and path planning on ROS 2, fusing LiDAR and IMU data to move safely through dynamic, unpredictable spaces.",
       specs: [
         ["Drive", "Differential"],
-        ["Compute", "Jetson"],
+        ["Compute", "Raspberry Pi"],
         ["Sensors", "LiDAR + IMU"],
         ["Stack", "ROS 2"],
       ],
@@ -89,7 +89,7 @@ export const robots = {
         "Closed-loop balancing at 1 kHz — real PID and LQR control running on real hardware, not just in simulation.",
       specs: [
         ["Type", "Self-balancing"],
-        ["Control", "PID + LQR"],
+        ["Trajectory", "Trotting, Crawling, Walking"],
         ["Loop rate", "1 kHz"],
         ["Sensors", "6-axis IMU"],
       ],
@@ -103,8 +103,8 @@ export const robots = {
         "Six degrees of freedom with ±0.1 mm repeatability for pick-and-place, assembly and inspection tasks.",
       specs: [
         ["DOF", "6"],
-        ["Reach", "850 mm"],
-        ["Payload", "5 kg"],
+        ["Reach", "500 mm"],
+        ["Payload", "200 g"],
         ["Repeatability", "±0.1 mm"],
       ],
     },

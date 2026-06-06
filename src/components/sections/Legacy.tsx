@@ -61,7 +61,7 @@ export default function Legacy() {
         {/* Hiring partners marquee */}
         <Reveal delay={0.15} className="mt-16">
           <p className="mb-6 text-center text-xs uppercase tracking-[0.2em] text-[var(--fg-faint)]">
-            49+ companies actively hiring from us
+            Mentors coming from
           </p>
           <div className="marquee-mask overflow-hidden">
             <div className="marquee-track gap-3">
