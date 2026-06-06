@@ -6,7 +6,7 @@ import CountUp from "@/components/ui/CountUp";
 
 const accents = ["#2f6bff", "#facc15", "#ff5100", "#2f6bff", "#facc15", "#ff5100"];
 const partners = Array.from({ length: 19 }, (_, i) =>
-  `/assets/logos/partners/company-${String(i + 1).padStart(2, "0")}.svg`
+  `/assets/logos/partners-white/company-${String(i + 1).padStart(2, "0")}.png`
 );
 
 export default function Legacy() {
@@ -63,16 +63,16 @@ export default function Legacy() {
           <p className="mb-6 text-center text-xs uppercase tracking-[0.2em] text-[var(--fg-faint)]">
             Mentors coming from
           </p>
-          <div className="marquee-mask overflow-hidden">
-            <div className="marquee-track gap-3">
+          <div className="mentor-wall marquee-mask overflow-hidden">
+            <div className="marquee-track items-center gap-12 sm:gap-16">
               {[...partners, ...partners].map((src, i) => (
-                <span
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
                   key={i}
-                  className="grid h-20 w-36 shrink-0 place-items-center rounded-xl border border-[var(--line)] bg-white/95 px-6"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={src} alt="" className="max-h-10 max-w-full object-contain" />
-                </span>
+                  src={src}
+                  alt=""
+                  className="mentor-logo h-9 w-auto max-w-[8.5rem] shrink-0 object-contain"
+                />
               ))}
             </div>
           </div>
